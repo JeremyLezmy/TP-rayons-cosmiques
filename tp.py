@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Apr 21 16:32:25 2019
+
+@author: jerem
+"""
+
 from pylab import*
 from numpy import polynomial as P
 import numpy as np
@@ -53,89 +60,91 @@ for rr in range(0, len(liste_fichiers)):
              moyenne =moyenne/taille
              v = min(indice_mini, abs(indice_mini-len(col)-1))-1
              
-             t_m = 0.
-             v_m = 0.
+             t_m =[]
+             v_m =[]
              
-             for k in range(indice_mini-v, indice_mini+v):
-                 t_m += (temps[k])*(col[k]-moyenne)
-                 v_m += (col[k]-moyenne)
+             for k in range(0, len(col)):
+                 t_m.append(temps[k])
+                 v_m.append(col[k]-moyenne)
              vtest.append(v_m)        
-             tt.append(t_m/v_m)
+             
+             tt.append(t_m[v_m.index(min(v_m))])
             
             
              ##############Calcul des vitesses############
-            
-         beta1 = (22.75*10**(-2))/(1.*c*(tt[1]-tt[0]))
-         beta2 = (5.5*10**(-2) )/(1.*c*(tt[2]-tt[1]-(13.5*10**(-2)/(beta1*c))))                            ###ATTENTION MODIF
-         beta3 = beta1
+         if tt[0]<tt[1] and tt[1]<tt[2] and (tt[1]-tt[0])<(tt[2]-tt[1]):
+             beta1 = (22.5*10**(-2))/(1.*c*(tt[1]-tt[0]))
+             beta2 = (5.5*10**(-2) )/(1.*c*(tt[2]-tt[1]-(13.5*10**(-2)/(beta1*c))))                   ###ATTENTION MODIF
+             beta3 = beta1
         
         
+         
          #############Condition pour avoir des evenements coherents##########
-         if beta2>0.  and beta2<beta3 and beta1<1.:
-             #########Calcul des gamma##########
-             gamma1 = 1./np.sqrt((1.-beta1**2.))
-             gamma2 = 1./np.sqrt((1.-beta2**2.))
-             mec2 = 0.511 #Mev
-             Pi = np.pi
-             dx = 1.5#cm
-             Z = 82.
-             A = 207.2 #g/mol
-             z = -1.
-             M= 105.66
-             I = 823.*10**(-6)
-             K= 0.307075
-             #############calcul de Tmax et de la perte d'energie avec bethebloch############
-
-             T_max=(2.*mec2*(beta1**2)*(gamma1**2))/(1.+(2*gamma1*mec2/M)+(mec2/M)**2)
-             P1=(K*(z**2)*Z)/(A*(beta1**2))
-            
-             dE1 =dx*11.35*P1*(0.5*np.log(abs((2*mec2*beta1**2*gamma1**2*T_max)/I**2))-beta1**2)
-             
-             
-             #•print(dE1)
-             beta_gamma.append(beta1*gamma1)
-            
-             
-             ###########Calcul des masses###########
-             mc2 = (dE1)/(gamma1-gamma2)
-             print(l, " Masse : ", mc2)
-             if mc2>0 :
-                 tt_masses.append(mc2)
-             ############Calcul des erreurs############
-             delta_x1=2.
-             delta_x2=2.
-             delta_t1=1.*10**-10
-             delta_t2=1.*10**-10
-             delta_dx = 1
-             d1 = 66.5*10**-1
-             d2 = 73.*10**-1
-             delta_beta1=(beta1*((delta_x1/d1)+(delta_t1/(tt[1]-tt[0]))))
-             delta_beta2=(beta2*((delta_x2/d2)+(delta_t2/(tt[2]-tt[1]))))       #######ATTENTION MODIF
-
-             delta_gamma1=(gamma1**3*beta1*delta_beta1)
-            
-             delta_gamma2=(gamma2**3*beta2*delta_beta2)
-            
-             f1=2.*delta_beta1/beta1
-             f2=2.*delta_gamma1/gamma1
-             f3=2.*mec2*delta_gamma1/M
-             f4=1.+2.*gamma1*(mec2/M)+(mec2/M)**2
-             delta_T_max = (T_max*(f1+f2-(f3/f4)))
-            
-             f6=K*z**2*Z/(A*beta1**3)
-             f7=(np.log(2.*mec2*beta1**2*gamma1**2*T_max/I**2)+1.)*delta_beta1
-             f8=K*z**2*Z*delta_gamma1/(A*beta1**2*gamma1)
-             f9=K*z**2*Z*delta_T_max/(2.*A*beta1**2*T_max)
-            
-             delta_dE1 = f6*f7+f8+f9
-             
-             #print("beta1=",beta1,"beta2=",beta2,"gamma1=",gamma1,"gamma2=",gamma2,"dE1=",dE1,"T_max=",T_max,"masse=",mc2)
-            
-            
-             delta_m = mc2 *(delta_dE1/dE1 + 10**-1*delta_dx/dx+(delta_gamma1+delta_gamma2)/(gamma1-gamma2))
-            
-             #print("delta_beta1=",delta_beta1,"delta_beta2=",delta_beta2,"delta_gamma1=",delta_gamma1,"delta_gamma2=",delta_gamma2,"delta_dE1=",delta_dE1,"delta_T_max=",delta_T_max,"delta_m=",delta_m)
-             nb = nb+ 1
-
-            
-            
+         
+             if beta2>0.  and beta2<beta3 and beta1<1.:
+                 #########Calcul des gamma##########
+                 gamma1 = 1./np.sqrt((1.-beta1**2.))
+                 gamma2 = 1./np.sqrt((1.-beta2**2.))
+                 mec2 = 0.511 #Mev
+                 Pi = np.pi
+                 dx = 1.5#cm
+                 Z = 82.
+                 A = 207.2 #g/mol
+                 z = -1.
+                 M= 105.66
+                 I = 823.*10**(-6)
+                 K= 0.307075
+                 #############calcul de Tmax et de la perte d'energie avec bethebloch############
+    
+                 T_max=(2.*mec2*(beta1**2)*(gamma1**2))/(1.+(2*gamma1*mec2/M)+(mec2/M)**2)
+                 P1=(K*(z**2)*Z)/(A*(beta1**2))
+                
+                 dE1 =11.35*dx*P1*(0.5*np.log(abs((2*mec2*beta1**2*gamma1**2*T_max)/I**2))-beta1**2)
+                 
+                 dE1=6.24*10**12*dx*10**(-2)*(4*np.pi/(9.11*10**(-31)*9*10**16))*(Z*11.35*10**3*6.022*10**(23)/(A*10**(-3)*beta1**2))*((((1.6*10**-19)**2)/(4*np.pi*8.854*10**-12))**2)*(np.log(abs((2*mec2*beta1**2)/(I*(1-beta1**2))))-beta1**2)
+                 #•print(dE1)
+                 beta_gamma.append(beta1*gamma1)
+                
+                 
+                 ###########Calcul des masses###########
+                 mc2 = (dE1)/(gamma1-gamma2)
+                 print(l, " Masse : ", mc2)
+                 if mc2>0:
+                     tt_masses.append(mc2)
+                 ############Calcul des erreurs############
+                 delta_x1=2.
+                 delta_x2=2.
+                 delta_t1=1.*10**-10
+                 delta_t2=1.*10**-10
+                 delta_dx = 1
+                 d1 = 66.5*10**-1
+                 d2 = 73.*10**-1
+                 delta_beta1=(beta1*((delta_x1/d1)+(delta_t1/(tt[1]-tt[0]))))
+                 delta_beta2=(beta2*((delta_x2/d2)+(delta_t2/(tt[2]-tt[1]))))       #######ATTENTION MODIF
+    
+                 delta_gamma1=(gamma1**3*beta1*delta_beta1)
+                
+                 delta_gamma2=(gamma2**3*beta2*delta_beta2)
+                
+                 f1=2.*delta_beta1/beta1
+                 f2=2.*delta_gamma1/gamma1
+                 f3=2.*mec2*delta_gamma1/M
+                 f4=1.+2.*gamma1*(mec2/M)+(mec2/M)**2
+                 delta_T_max = (T_max*(f1+f2-(f3/f4)))
+                
+                 f6=K*z**2*Z/(A*beta1**3)
+                 f7=(np.log(2.*mec2*beta1**2*gamma1**2*T_max/I**2)+1.)*delta_beta1
+                 f8=K*z**2*Z*delta_gamma1/(A*beta1**2*gamma1)
+                 f9=K*z**2*Z*delta_T_max/(2.*A*beta1**2*T_max)
+                
+                 delta_dE1 = f6*f7+f8+f9
+                 
+                 #print("beta1=",beta1,"beta2=",beta2,"gamma1=",gamma1,"gamma2=",gamma2,"dE1=",dE1,"T_max=",T_max,"masse=",mc2)
+                
+                
+                 delta_m = mc2 *(delta_dE1/dE1 + 10**-1*delta_dx/dx+(delta_gamma1+delta_gamma2)/(gamma1-gamma2))
+                
+                 #print("delta_beta1=",delta_beta1,"delta_beta2=",delta_beta2,"delta_gamma1=",delta_gamma1,"delta_gamma2=",delta_gamma2,"delta_dE1=",delta_dE1,"delta_T_max=",delta_T_max,"delta_m=",delta_m)
+                 nb = nb+ 1
+    
+                
