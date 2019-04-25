@@ -89,7 +89,7 @@ for rr in range(0, len(liste_fichiers)):
              T_max=(2.*mec2*(beta1**2)*(gamma1**2))/(1.+(2*gamma1*mec2/M)+(mec2/M)**2)
              P1=(K*(z**2)*Z)/(A*(beta1**2))
             
-             dE1 =dx*10**-2*P1*(0.5*np.log(abs((2*mec2*beta1**2*gamma1**2*T_max)/I**2))-beta1**2)
+             dE1 =dx*11.35*P1*(0.5*np.log(abs((2*mec2*beta1**2*gamma1**2*T_max)/I**2))-beta1**2)
              
              
              #•print(dE1)
